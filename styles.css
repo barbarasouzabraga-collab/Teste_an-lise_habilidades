@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #333;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+}
+
+/* Estilo dos Inputs */
+.habilidade-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+.habilidade-item label {
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+.habilidade-item input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    text-align: right;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Estilo da Tabela de Resultados */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #e0e0e0;
+}
+
+/* Cores de Orientação */
+.orientacao-A {
+    background-color: #f8d7da; /* Vermelho claro */
+}
+
+.orientacao-B {
+    background-color: #d4edda; /* Verde claro */
+}
+/* Adiciona estilo para o Nível C (Ótimo) */
+.orientacao-C {
+    background-color: #cce5ff; /* Azul claro para indicar excelência/avanço */
+}
