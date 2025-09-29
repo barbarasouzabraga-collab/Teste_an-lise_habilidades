@@ -1,3 +1,5 @@
+/* eslint quotes: ["error", "double"] */
+
 // VARIÁVEL GLOBAL: A Base de Dados JSON (Corrigida e incorporada)
 const baseDeHabilidades = [
   {
@@ -1264,38 +1266,38 @@ const baseDeHabilidades = [
 ];
 
 // Elementos da interface (DOM)
-const inputContainer = document.getElementById('habilidades-input-container');
-const gerarOrientacaoBtn = document.getElementById('gerarOrientacaoBtn');
-const resultadoSection = document.getElementById('resultado-section');
-const resultadoContainer = document.getElementById('resultado-container');
+const inputContainer = document.getElementById("habilidades-input-container");
+const gerarOrientacaoBtn = document.getElementById("gerarOrientacaoBtn");
+const resultadoSection = document.getElementById("resultado-section");
+const resultadoContainer = document.getElementById("resultado-container");
 
 // ----------------------------------------------------
 // A. Geração do Formulário de Entrada na Abertura da Página
 // ----------------------------------------------------
 
 function exibirInputsDeAcertos() {
-    inputContainer.innerHTML = '';
+    inputContainer.innerHTML = "";
     
     // Filtra apenas as habilidades que possuem o campo 'Habilidade' (Descritor)
     const habilidadesParaExibir = baseDeHabilidades.filter(h => h.Habilidade && h.ID_Habilidade);
     
     habilidadesParaExibir.forEach(habilidade => {
-        const div = document.createElement('div');
-        div.classList.add('habilidade-item');
+        const div = document.createElement("div");
+        div.classList.add("habilidade-item");
         
         // Exibe o ID e o Descritor da Habilidade
         // Usa o Percentual_Corte_B como referência para o usuário
         const corteB = Math.round(habilidade.Percentual_Corte_B * 100);
-        const label = document.createElement('label');
+        const label = document.createElement("label");
         label.innerHTML = `<strong>${habilidade.ID_Habilidade} - ${habilidade.DISCIPLINA} (${habilidade.ETAPA}):</strong> ${habilidade.Habilidade} (Corte Intermediário: ${corteB}%)`;
 
         // Campo para digitar o percentual
-        const input = document.createElement('input');
-        input.type = 'number';
+        const input = document.createElement("input");
+        input.type = "number";
         input.min = 0;
         input.max = 100;
         input.step = 1;
-        input.placeholder = 'Acertos em % (ex: 75)';
+        input.placeholder = "Acertos em % (ex: 75)";
         input.id = `input-${habilidade.ID_Habilidade}-${habilidade.ETAPA}`; // ID composto para itens duplicados em diferentes etapas
         input.required = true;
 
@@ -1309,11 +1311,11 @@ function exibirInputsDeAcertos() {
 // B. Lógica de Cálculo e Decisão (Três Níveis: A, B, C)
 // ----------------------------------------------------
 
-gerarOrientacaoBtn.addEventListener('click', gerarOrientacoes);
+gerarOrientacaoBtn.addEventListener("click", gerarOrientacoes);
 
 function gerarOrientacoes() {
-    resultadoContainer.innerHTML = '';
-    let resultadosHTML = '<table><tr><th>ID (Etapa)</th><th>Acertos (%)</th><th>Orientação</th><th>Nível</th><th>Texto da Orientação</th></tr>';
+    resultadoContainer.innerHTML = "";
+    let resultadosHTML = "<table><tr><th>ID (Etapa)</th><th>Acertos (%)</th><th>Orientação</th><th>Nível</th><th>Texto da Orientação</th></tr>";
 
     let todosValidos = true;
     let acertosInvalidos = 0;
@@ -1331,12 +1333,12 @@ function gerarOrientacoes() {
         const acertos = parseFloat(acertosDigitados) / 100;
 
         if (isNaN(acertos) || acertos < 0 || acertos > 1 || acertosDigitados === "") {
-             input.style.border = '2px solid red';
+             input.style.border = "2px solid red";
              todosValidos = false;
              acertosInvalidos++;
              return; 
         }
-        input.style.border = ''; // Limpa a borda vermelha se for válido
+        input.style.border = ""; // Limpa a borda vermelha se for válido
 
         const pcA = habilidade.Percentual_Corte_A;
         const pcB = habilidade.Percentual_Corte_B;
@@ -1348,22 +1350,22 @@ function gerarOrientacoes() {
         // Lógica de Decisão (A, B ou C)
         if (acertos <= pcA) {
             // NÍVEL A: Abaixo do 1º ponto de corte
-            orientacaoTipo = 'A';
+            orientacaoTipo = "A";
             orientacaoTexto = habilidade.Texto_orientacao_A;
-            classeCor = 'orientacao-A';
-            nivel = 'Revisão Necessária';
+            classeCor = "orientacao-A";
+            nivel = "Revisão Necessária";
         } else if (acertos > pcA && acertos <= pcB) {
             // NÍVEL B: Entre os dois pontos de corte
-            orientacaoTipo = 'B';
+            orientacaoTipo = "B";
             orientacaoTexto = habilidade.Texto_orientacao_B;
-            classeCor = 'orientacao-B';
-            nivel = 'Intermediário / Aplicação';
+            classeCor = "orientacao-B";
+            nivel = "Intermediário / Aplicação";
         } else {
             // NÍVEL C: Acima do 2º ponto de corte
-            orientacaoTipo = 'C';
+            orientacaoTipo = "C";
             orientacaoTexto = habilidade.Texto_orientacao_C;
-            classeCor = 'orientacao-C';
-            nivel = 'Aprofundamento / Excelência';
+            classeCor = "orientacao-C";
+            nivel = "Aprofundamento / Excelência";
         }
 
         resultadosHTML += `
@@ -1379,13 +1381,13 @@ function gerarOrientacoes() {
 
     if (!todosValidos) {
         resultadoContainer.innerHTML = `<p style="color: red; font-weight: bold;">⚠️ Por favor, preencha corretamente os ${acertosInvalidos} campos marcados em vermelho (valores de 0 a 100).</p>`;
-        resultadoSection.style.display = 'block';
+        resultadoSection.style.display = "block";
         return;
     }
 
-    resultadosHTML += '</table>';
+    resultadosHTML += "</table>";
     resultadoContainer.innerHTML = resultadosHTML;
-    resultadoSection.style.display = 'block';
+    resultadoSection.style.display = "block";
 }
 
 // Inicializa o sistema: gera os inputs assim que a página estiver pronta
