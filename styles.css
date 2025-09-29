@@ -75,8 +75,8 @@ h2, h3 {
 
 /* Botão de Gerar Orientação */
 #gerarOrientacaoBtn {
-    background-color: #28a745; /* Verde */
-    color: white;
+    background-color: #f7fb22; /* Verde */
+    color: black;
     padding: 12px 25px;
     border: none;
     border-radius: 5px;
@@ -129,5 +129,6 @@ th {
     background-color: #d4edda;
     color: #000000; /* Texto em verde escuro */
 }
+
 
 
