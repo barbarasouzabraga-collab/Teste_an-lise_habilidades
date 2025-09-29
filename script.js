@@ -1,4 +1,4 @@
-// VARIÁVEL GLOBAL: A Base de Dados JSON (Corrigida e incorporada)
+// VARIÁVEL GLOBAL: A Base de Dados JSON (com o novo campo 'ETAPA' incluído)
 const baseDeHabilidades = [
   {
     "ETAPA": "2EF",
@@ -1268,26 +1268,69 @@ const inputContainer = document.getElementById("habilidades-input-container");
 const gerarOrientacaoBtn = document.getElementById("gerarOrientacaoBtn");
 const resultadoSection = document.getElementById("resultado-section");
 const resultadoContainer = document.getElementById("resultado-container");
+// NOVO ELEMENTO PARA O FILTRO
+const etapaFilterContainer = document.getElementById("etapa-filter-container");
 
 // ----------------------------------------------------
-// A. Geração do Formulário de Entrada na Abertura da Página
+// 1. Lógica do Filtro de Etapa (Nova Função)
 // ----------------------------------------------------
 
-function exibirInputsDeAcertos() {
+function obterEtapasUnicas() {
+    const etapas = baseDeHabilidades.map(h => h.ETAPA);
+    // Usa Set para obter valores únicos e sort() para ordenar
+    return [...new Set(etapas)].sort();
+}
+
+function criarSeletorEtapa() {
+    const etapasUnicas = obterEtapasUnicas();
+    if (etapasUnicas.length === 0) return;
+
+    let selectHTML = '<h3>1. Escolha a Etapa para Análise:</h3><select id="etapa-selector">';
+    selectHTML += '<option value="">-- Selecione a Etapa --</option>';
+
+    etapasUnicas.forEach(etapa => {
+        selectHTML += `<option value="${etapa}">${etapa}</option>`;
+    });
+
+    selectHTML += '</select>';
+    etapaFilterContainer.innerHTML = selectHTML;
+
+    // Adiciona o listener para filtrar os inputs ao selecionar
+    const seletorEtapa = document.getElementById('etapa-selector');
+    seletorEtapa.addEventListener('change', filtrarEExibirInputs);
+
+    // Esconde os inputs e botão até a escolha
+    inputContainer.style.display = 'none';
+    gerarOrientacaoBtn.style.display = 'none';
+    resultadoSection.style.display = 'none';
+}
+
+// ----------------------------------------------------
+// 2. Geração e Filtro do Formulário de Entrada (Ajustada)
+// ----------------------------------------------------
+
+function filtrarEExibirInputs() {
+    const seletor = document.getElementById('etapa-selector');
+    const etapaSelecionada = seletor.value;
+
     inputContainer.innerHTML = "";
     
-    // Filtra apenas as habilidades que possuem o campo 'Habilidade' (Descritor)
-    const habilidadesParaExibir = baseDeHabilidades.filter(h => h.Habilidade && h.ID_Habilidade);
-    
-    habilidadesParaExibir.forEach(habilidade => {
+    // Esconde tudo se nada estiver selecionado
+    if (!etapaSelecionada) {
+        inputContainer.style.display = 'none';
+        gerarOrientacaoBtn.style.display = 'none';
+        return;
+    }
+
+    const habilidadesFiltradas = baseDeHabilidades.filter(h => h.ETAPA === etapaSelecionada && h.Habilidade && h.ID_Habilidade);
+
+    habilidadesFiltradas.forEach(habilidade => {
         const div = document.createElement("div");
         div.classList.add("habilidade-item");
-        
-        // Exibe o ID e o Descritor da Habilidade
-        // Usa o Percentual_Corte_B como referência para o usuário
-        const corteB = Math.round(habilidade.Percentual_Corte_B * 100);
+
+        // REQUISIÇÃO 2: Remove a informação de Corte Intermediário
         const label = document.createElement("label");
-        label.innerHTML = `<strong>${habilidade.ID_Habilidade} - ${habilidade.DISCIPLINA} (${habilidade.ETAPA}):</strong> ${habilidade.Habilidade} (Corte Intermediário: ${corteB}%)`;
+        label.innerHTML = `<strong>${habilidade.ID_Habilidade} - ${habilidade.DISCIPLINA} (${habilidade.ETAPA}):</strong> ${habilidade.Habilidade}`;
 
         // Campo para digitar o percentual
         const input = document.createElement("input");
@@ -1296,37 +1339,45 @@ function exibirInputsDeAcertos() {
         input.max = 100;
         input.step = 1;
         input.placeholder = "Acertos em % (ex: 75)";
-        input.id = `input-${habilidade.ID_Habilidade}-${habilidade.ETAPA}`; // ID composto para itens duplicados em diferentes etapas
+        input.id = `input-${habilidade.ID_Habilidade}-${habilidade.ETAPA}`; 
         input.required = true;
 
         div.appendChild(label);
         div.appendChild(input);
         inputContainer.appendChild(div);
     });
+    
+    // Exibe os inputs e o botão de gerar
+    inputContainer.style.display = 'block';
+    gerarOrientacaoBtn.style.display = 'block';
+    resultadoSection.style.display = 'none';
 }
 
 // ----------------------------------------------------
-// B. Lógica de Cálculo e Decisão (Três Níveis: A, B, C)
+// 3. Lógica de Cálculo e Decisão (Tabela Ajustada)
 // ----------------------------------------------------
 
 gerarOrientacaoBtn.addEventListener("click", gerarOrientacoes);
 
 function gerarOrientacoes() {
     resultadoContainer.innerHTML = "";
-    let resultadosHTML = "<table><tr><th>ID (Etapa)</th><th>Acertos (%)</th><th>Orientação</th><th>Nível</th><th>Texto da Orientação</th></tr>";
+    
+    // REQUISIÇÃO 3: Ajuste de colunas e nomes de cabeçalho
+    let resultadosHTML = "<table><tr><th>Descritor (Etapa)</th><th>Acertos (%)</th><th>Texto da Orientação</th></tr>";
 
     let todosValidos = true;
     let acertosInvalidos = 0;
 
+    // Itera sobre a base inteira, mas processa apenas os inputs que foram criados (da Etapa selecionada)
     baseDeHabilidades.forEach(habilidade => {
         // Encontra o input usando o ID composto
         const inputId = `input-${habilidade.ID_Habilidade}-${habilidade.ETAPA}`;
         const input = document.getElementById(inputId);
         
-        // Se o input não existir (foi filtrado/não encontrado) ou valor vazio, ignora.
+        // Se o input não existir (é de outra Etapa ou não foi criado), ignora.
         if (!input) return;
 
-        // Converte o input (em porcentagem: 0 a 100) para decimal (0.0 a 1.0)
+        // ... (Validação do Input) ...
         const acertosDigitados = input.value;
         const acertos = parseFloat(acertosDigitados) / 100;
 
@@ -1343,35 +1394,27 @@ function gerarOrientacoes() {
         let orientacaoTipo;
         let orientacaoTexto;
         let classeCor;
-        let nivel;
-
+        
         // Lógica de Decisão (A, B ou C)
         if (acertos <= pcA) {
-            // NÍVEL A: Abaixo do 1º ponto de corte
             orientacaoTipo = "A";
             orientacaoTexto = habilidade.Texto_orientacao_A;
             classeCor = "orientacao-A";
-            nivel = "Revisão Necessária";
         } else if (acertos > pcA && acertos <= pcB) {
-            // NÍVEL B: Entre os dois pontos de corte
             orientacaoTipo = "B";
             orientacaoTexto = habilidade.Texto_orientacao_B;
             classeCor = "orientacao-B";
-            nivel = "Intermediário / Aplicação";
         } else {
-            // NÍVEL C: Acima do 2º ponto de corte
             orientacaoTipo = "C";
             orientacaoTexto = habilidade.Texto_orientacao_C;
             classeCor = "orientacao-C";
-            nivel = "Aprofundamento / Excelência";
         }
 
+        // REQUISIÇÃO 3: Apenas Descritor, Acertos e Texto da Orientação
         resultadosHTML += `
             <tr class="${classeCor}">
                 <td>${habilidade.ID_Habilidade} (${habilidade.ETAPA})</td>
                 <td>${(acertos * 100).toFixed(0)}%</td>
-                <td>${orientacaoTipo}</td>
-                <td>${nivel}</td>
                 <td>${orientacaoTexto}</td>
             </tr>
         `;
@@ -1388,5 +1431,5 @@ function gerarOrientacoes() {
     resultadoSection.style.display = "block";
 }
 
-// Inicializa o sistema: gera os inputs assim que a página estiver pronta
-exibirInputsDeAcertos();
+// Inicializa: Cria o seletor de etapa assim que a página estiver pronta
+criarSeletorEtapa();
