@@ -8,8 +8,8 @@ body {
 }
 
 header {
-    background-color: #007bff; /* Azul primário */
-    color: white;
+    background-color: #f7fb22; /* Azul primário */
+    color: black;
     padding: 20px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -102,8 +102,8 @@ th, td {
 }
 
 th {
-    background-color: #007bff;
-    color: white;
+    background-color: #f7fb22;
+    color: black;
     font-weight: bold;
     text-transform: uppercase;
     font-size: 14px;
@@ -114,18 +114,19 @@ th {
 /* Nível A: Revisão Necessária (Vermelho claro/Laranja) */
 .orientacao-A {
     background-color: #fcebeb; /* Fundo bem claro */
-    color: #dc3545; /* Texto em vermelho */
+    color: #000000; /* Texto em vermelho */
     font-weight: bold;
 }
 
 /* Nível B: Intermediário / Aplicação (Amarelo claro) */
 .orientacao-B {
     background-color: #fff3cd; 
-    color: #856404; /* Texto em amarelo escuro/marrom */
+    color: #000000; /* Texto em amarelo escuro/marrom */
 }
 
 /* Nível C: Aprofundamento / Excelência (Verde claro) */
 .orientacao-C {
     background-color: #d4edda;
-    color: #155724; /* Texto em verde escuro */
+    color: #000000; /* Texto em verde escuro */
 }
+
