@@ -113,22 +113,23 @@ th {
 
 /* Nível A: Revisão Necessária (Vermelho claro/Laranja) */
 .orientacao-A {
-    background-color: #fcebeb; /* Fundo bem claro */
-    color: #000000; /* Texto em vermelho */
+    background-color: #facdcd; /* Fundo bem claro */
+    color: #000000; /* Texto em preto*/
     font-weight: bold;
 }
 
 /* Nível B: Intermediário / Aplicação (Amarelo claro) */
 .orientacao-B {
-    background-color: #fff3cd; 
-    color: #000000; /* Texto em amarelo escuro/marrom */
+    background-color: #eeda9a; 
+    color: #000000; /* Texto em preto */
 }
 
 /* Nível C: Aprofundamento / Excelência (Verde claro) */
 .orientacao-C {
-    background-color: #d4edda;
-    color: #000000; /* Texto em verde escuro */
+    background-color: #4ad36a;
+    color: #000000; /* Texto em preto */
 }
+
 
 
 
