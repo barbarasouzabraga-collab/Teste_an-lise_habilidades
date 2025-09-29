@@ -1389,5 +1389,4 @@ function gerarOrientacoes() {
 }
 
 // Inicializa o sistema: gera os inputs assim que a página estiver pronta
-window.onload = exibirInputsDeAcertos;
-
+exibirInputsDeAcertos();
