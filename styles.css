@@ -87,7 +87,7 @@ h2, h3 {
 }
 
 #gerarOrientacaoBtn:hover {
-    background-color: #218838;
+    background-color: #f7fb22;
 }
 table {
     width: 100%;
@@ -129,6 +129,5 @@ th {
     background-color: #d4edda;
     color: #000000; /* Texto em verde escuro */
 }
-
 
 
